@@ -1,0 +1,30 @@
+
+{% extends "base.html" %}
+{%block body%}
+    <h1 style="text-align: center; margin-top: 3%;color: black;">Download files</h1>
+
+    <form style="
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-49%, -49%);" action="/verify" method="post">
+
+        <div class="mb-3"  >
+          <label for="exampleInputEmail1" class="form-label" class="color:white;">Filename</label>
+          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="filename">
+
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label ;color:white;">Password</label>
+          <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+        </div>
+
+       <div style="text-align:center color:white;"><button type="submit" class="btn btn-primary">download</button></div>
+
+      </form>
+
+      {%for i in files%}
+
+      <h2>{{files[i]}}</h2>
+      {%endfor%}
+{%endblock%}

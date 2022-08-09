@@ -1,0 +1,18 @@
+
+{% extends "base.html" %}
+{%block body%}
+<h1>{{session["UserName"]}}</h1>
+    
+    
+<form action="/upload" enctype='multipart/form-data' method='POST'>
+    <input type="file" name="file" >
+    <input type="password" name="key">
+    <input type="submit" value="upload">
+</form>
+<br>
+
+{%for i in files%}
+
+<h2>{{files[i]}}</h2>
+{%endfor%}
+{%endblock%}
