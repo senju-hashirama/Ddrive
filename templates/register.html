@@ -1,37 +1,69 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
+{% block body %}
 
-{%block body%}
-    <h1 style="text-align: center; margin-top: 4%;">Register</h1>
+    <!-- <form style="
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-49%, -49%);" >
 
-<form method="post" action="/register"  style="margin-top: 5%;
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-49%, -49%);" >
-    
-    
-    <div class="mb-3"  >
-      <label for="exampleInputEmail1" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
-      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-    </div>
-    <div class="mb-3"  >
-      <label for="exampleInputEmail1" class="form-label">Username</label>
-      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username">
-      
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1" name="password">
-      <div id="emailHelp" class="form-text">Your password should have a minimum of 4 characters.</div>
-    </div>
-    <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword2" name="confirm">
+        <div class="mb-3"  >
+          <label for="exampleInputEmail1" class="form-label" class="color:white;">Email</label>
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
+
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label ;color:white;">Password</label>
+          <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+        </div>
+
+       <div style="text-align:center;"><button type="submit" class="btn btn-primary">Login</button></div>
+
+
+
+      </form> -->
+      <div class="login-container flex justify-center items-center bg-slate-100">
+        <h1 class="text-5xl">Login</h1>
       </div>
-   
-      <div style="text-align:center"><button type="submit" class="btn btn-primary">Register</button></div>
       
-  </form>
-  
-{%endblock%}
+      <div class="w-full w-screen flex justify-center items-center h-screen bg-slate-100">
+        <form action="/register" method='POST' class="bg-slate-200 shadow-xl p-40 rounded-lg mb-4">
+          <div class="mb-4">
+
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+              Email
+            </label>
+            <input class="shadow appearance-none border rounded-lg bg-slate-100 rounded w-full py-2 px-16 text-gray-700 leading-tight w-full focus:outline-none focus:shadow-outline " name="email" type="email" placeholder="Enter your email">
+          </div>
+          <div class="mb-4">
+
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+              Username
+            </label>
+            <input class="shadow appearance-none border rounded-lg bg-slate-100 rounded w-full py-2 px-16 text-gray-700 leading-tight w-full focus:outline-none focus:shadow-outline " name="username" type="text" placeholder="Enter your username">
+          </div>
+
+
+          <div class="mb-6">
+            <label class="block text-gray-700  text-sm font-bold mb-2" for="password">
+              Password
+            </label>
+            <input class="shadow appearance-none border bg-slate-100 border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" name="password" type="password" placeholder="******************">
+            <p class="text-red-500 text-xs italic">Please choose a password.</p>
+          </div>
+          <div class="mb-6">
+            <label class="block text-gray-700  text-sm font-bold mb-2" for="password">
+              Confirm Password
+            </label>
+            <input class="shadow appearance-none border bg-slate-100 border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" name="confirm" type="password" placeholder="******************">
+            <p class="text-red-500 text-xs italic">Please confirm your password.</p>
+          </div>
+          <div class="flex items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+              Register
+            </button>
+          </div>
+        </form>
+      </div>
+
+{% endblock %}
