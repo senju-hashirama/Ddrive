@@ -18,8 +18,8 @@ Our cloud storage solution brings together modern day web3 storage and IPFS toge
 
 ## Project link
 https://d856-49-206-15-29.ngrok.io/
-Image
-# Screenshot
+
+## Screenshot
 
 ![image](https://user-images.githubusercontent.com/85382114/183581269-bf672d30-7cd8-46c3-80f1-7267dc480ed7.png)
 
