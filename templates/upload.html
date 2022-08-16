@@ -1,6 +1,37 @@
 
 {% extends "base.html" %}
 {%block body%}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+
+{% for category, message in messages %}
+
+  {%if category=="error"%}
+  <div class="alert alert-danger" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {%elif category=="warning"%}
+  <div class="alert alert-warning" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {%elif category=="message"%}
+  <div class="alert alert-success" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {%endif%}
+{% endfor %}
+
+{% endif %}
+{% endwith %}
 <body class="bg-slate-100">
 <!-- <h1 class="text-center mt-12"></h1> -->
 <h1 class="text-center font-medium leading-tight text-3xl mt-8 mb-4 text-black bg-slate-100">Welcome {{session["UserName"]}} </h1>
@@ -127,6 +158,7 @@
                         </button>
                       </div>
                     </section>
+
                   </article>
                 </li>
               </template>
@@ -235,11 +267,6 @@
           };
           
           // print all selected files
-          document.getElementById("submit").onclick = () => {
-            alert(`Submitted Files:\n${JSON.stringify(FILES)}`);
-            console.log(FILES);
-          };
-          
           // clear entire selection
           document.getElementById("cancel").onclick = () => {
             while (gallery.children.length > 0) {
@@ -297,4 +324,5 @@
 
 <h2>{{files[i]}}</h2>
 {%endfor%}
+
 {%endblock%}

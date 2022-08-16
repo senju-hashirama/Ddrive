@@ -2,6 +2,37 @@
     {% extends "base.html" %}
     {% block body %}
     
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    
+    {% for category, message in messages %}
+    
+      {%if category=="error"%}
+      <div class="alert alert-danger" role="alert">
+        {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {%elif category=="warning"%}
+      <div class="alert alert-warning" role="alert">
+        {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {%elif category=="message"%}
+      <div class="alert alert-success" role="alert">
+        {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {%endif%}
+    {% endfor %}
+    
+    {% endif %}
+    {% endwith %}
         <!-- <form style="
         position: absolute;
         top: 50%;
@@ -22,13 +53,210 @@
     
     
     
-          </form> -->
+          </form> -->{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+
+{% for category, message in messages %}
+
+  {%if category=="error"%}
+  <div class="alert alert-danger" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {%elif category=="warning"%}
+  <div class="alert alert-warning" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {%elif category=="message"%}
+  <div class="alert alert-success" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {%endif%}
+{% endfor %}
+
+{% endif %}
+{% endwith %}
+
           <div class="login-container flex justify-center items-center bg-slate-100">
             <h1 class="text-5xl">Download Files</h1>
           </div>
           
-          <div class="w-full w-screen flex justify-center items-center h-screen bg-slate-100">
-            <form action="/" method='POST' class="bg-slate-200 shadow-xl p-40 rounded-lg mb-4">
+{%for i in files%}
+<div class="flex bg-slate-100 items-center">
+<button class="modal-open text-start hover:text-gray-500 hover:text-indigo-500 font-bold py-2 px-4 mt-8 rounded-full w-1/2" onclick="setName('{{files[i]}}')">{{files[i]}}</button>
+<p class="flex justify-center items-center mt-8 ml-5">
+<!-- Show delete icon here from font awesome -->
+<i class="modal-open fa fa-trash-o fa-2x hover:cursor-pointer hover:text-red-600" onclick="deleteModal('{{files[i]}}')"></i>
+</p>
+</div>
+<script>
+    function setName(name) {
+  //  REmove the hidden attribute from modal div
+    document.getElementById("filename").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("modal1").removeAttribute("hidden");
+    document.getElementById("filename").value = String(name);
+    document.getElementById("modal-heading").innerHTML = "Download Your File";
+    document.getElementById("verify-form").action = "/verify";
+    document.getElementById("form-btn").innerHTML = "Download";
+  };
+  function deleteModal(name) {
+    document.getElementById("modal-heading").innerHTML = "Delete Your File";
+    // Clear the input field
+    document.getElementById("filename").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("verify-form").action = "/delete";
+    document.getElementById("form-btn").innerHTML = "Delete";
+    document.getElementById("filename").value = String(name);
+  }
+</script>
+<!-- Get the name of the file in modal -->
+
+{%endfor%}
+ 
+
+  
+<!--Modal-->
+<div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center" hidden id="modal1">
+  <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+  
+  <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+    
+    <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50">
+      <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+      </svg>
+      <span class="text-sm">(Esc)</span>
+    </div>
+
+    <!-- Add margin if you want to see some of the overlay behind the modal-->
+    <div class="modal-content py-4 text-left px-6">
+      <!--Title-->
+      <div class="flex justify-between items-center pb-3">
+        <p class="text-2xl font-bold" id="modal-heading">Dowload Your File</p>
+        <div class="modal-close cursor-pointer z-50" onclick="HideModal()">
+          <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+          </svg>
+        </div>
+        <script>
+          function HideModal() {
+              document.getElementById("modal1").setAttribute("hidden", "true");
+          }
+      </script>
+      </div>
+
+      <!--Body-->
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-slate-100">
+        <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-toggle="authentication-modal" onclick="HideModal()">
+            <!-- <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg> -->
+            <span class="sr-only">Close modal</span>
+        </button>
+        <script>
+            function HideModal() {
+                document.getElementById("modal1").setAttribute("hidden", "true");
+            }
+        </script>
+        <div class="py-6 px-6 lg:px-8">
+            <form class="space-y-6" action="/verify" id="verify-form" method="POST">
+                <div>
+                    <label for="filename" class="text-black block mb-2 text-sm font-medium text-slate-100 dark:text-black">File Name</label>
+                    <input type="text" name="filename" id="filename" class="border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-black" placeholder="name@company.com" required>
+                </div>
+                <div>
+                    <label for="password" class="text-black block mb-2 text-sm font-medium ">File password</label>
+                    <input type="password" name="password" id="password" placeholder="Enter your Password" class="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                </div>
+                <div class="flex justify-between">
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <!-- <input id="remember" type="checkbox" value="" class="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800" required> -->
+                        </div>
+                        <!-- <label for="remember" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label> -->
+                    </div>
+                    <!-- <a href="#" class="text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a> -->
+                </div>
+                <button type="submit" id="form-btn" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> Download File</button>
+            </form>
+        </div>
+    </div>
+
+      <!--Footer-->
+      <div class="flex justify-end pt-2">
+        <!-- <button class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2">Action</button> -->
+        <!-- <button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400">Close</button> -->
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+
+  var openmodal = document.querySelectorAll('.modal-open')
+  for (var i = 0; i < openmodal.length; i++) {
+    openmodal[i].addEventListener('click', function(event){
+      // Print the name of the clicked element
+      console.log(event.target)
+
+    event.preventDefault()
+    toggleModal()
+    })
+  }
+  
+  const overlay = document.querySelector('.modal-overlay')
+  overlay.addEventListener('click', toggleModal)
+  
+  var closemodal = document.querySelectorAll('.modal-close')
+  for (var i = 0; i < closemodal.length; i++) {
+    closemodal[i].addEventListener('click', toggleModal)
+  
+  }
+  
+  document.onkeydown = function(evt) {
+    evt = evt || window.event
+    var isEscape = false
+    if ("key" in evt) {
+    isEscape = (evt.key === "Escape" || evt.key === "Esc")
+    } else {
+    isEscape = (evt.keyCode === 27)
+    }
+    if (isEscape && document.body.classList.contains('modal-active')) {
+    toggleModal()
+    }
+  };
+  
+  
+  function toggleModal () {
+    const body = document.querySelector('body')
+    const modal = document.querySelector('.modal')
+    modal.classList.toggle('opacity-0')
+    modal.classList.toggle('pointer-events-none')
+    body.classList.toggle('modal-active')
+    // Set hidden to true when user clicks outside of modal if it is not already hidden
+    if (modal.classList.contains('opacity-0')) {
+      modal.setAttribute("hidden", "true");
+    } else {
+      modal.removeAttribute("hidden");
+    }
+
+  }
+  
+   
+</script>
+
+          <!-- <div class="w-full w-screen flex justify-center items-center h-screen bg-slate-100">
+            
+            <form action="/verify" method='POST' class="bg-slate-200 shadow-xl p-40 rounded-lg mb-4">
               <div class="mb-4">
     
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="filename">
@@ -48,7 +276,8 @@
                 </button>
               </div>
             </form>
-          </div>
+            
+          </div> -->
     
     {% endblock %}
 
