@@ -254,62 +254,65 @@ def download():
     if request.method == "POST":
         if "UserID" in session:
             users = db.get().val()
-            for i in users:
-                print(i, session["UserID"])
-            if session["UserID"] in users:
+            if users!=None:
+                        
+                    for i in users:
+                        print(i, session["UserID"])
+                    if session["UserID"] in users:
 
-                passwd = request.form.get("password")
-                filename = request.form.get("filename").replace(".", ",")
+                        passwd = request.form.get("password")
+                        filename = request.form.get("filename").replace(".", ",")
 
-                print("filename", filename)
-                print("passwd", passwd)
+                        print("filename", filename)
+                        print("passwd", passwd)
 
-                try:
-                    filedata = (
-                        db.child(session["UserID"])
-                        .child(filename)
-                        .child("data")
-                        .get()
-                        .val()
-                    )
-                except:
-                    flash("Could not get file try again ", "error")
-                    return redirect("/verifyuser")
-                print("\n FILEDATA \n")
-                print(db.child(session["UserID"]).child(filename))
-                if filedata is not None:
-                    cid = filedata[-1]
-                    shash = filedata[0]
-                else:
-                    flash("Invalid filename", "error")
-                    return redirect("/verifyuser")
-                print("cid", cid, shash)
-                # shash=db.child(session["UserID"]).child(filename).child("data").get().val()[0]
-                check, key = verify_hash(shash, passwd)
-                if check:
-                    file = filename.replace(",", ".")
-                    session["AllowedFiles"].append(file)
-                    opp = subprocess.run(
-                        "w3 get {} -o {}".format(cid, app.config["uploadFolder"]),
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
-                        shell=True,
-                    )
-                    if opp.returncode == 0:
+                        try:
+                            filedata = (
+                                db.child(session["UserID"])
+                                .child(filename)
+                                .child("data")
+                                .get()
+                                .val()
+                            )
+                        except:
+                            flash("Could not get file try again ", "error")
+                            return redirect("/verifyuser")
+                    
+                        if filedata is not None:
+                            cid = filedata[-1]
+                            shash = filedata[0]
+                        else:
+                            flash("Invalid filename", "error")
+                            return redirect("/verifyuser")
+                        print("cid", cid, shash)
+                        # shash=db.child(session["UserID"]).child(filename).child("data").get().val()[0]
+                        check, key = verify_hash(shash, passwd)
+                        if check:
+                            file = filename.replace(",", ".")
+                            
+                            opp = subprocess.run(
+                                "w3 get {} -o {}".format(cid, app.config["uploadFolder"]),
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                shell=True,
+                            )
+                            if opp.returncode == 0:
 
-                        decrypt_file(file, key)
-                        file = "decrypted" + filename.replace(",", ".")
-                        return send_file("uploads/{}".format(file), as_attachment=True)
+                                decrypt_file(file, key)
+                                file = "decrypted" + filename.replace(",", ".")
+                                return send_file("uploads/{}".format(file), as_attachment=True)
+                            else:
+                                flash("Unable to fetch your file please try later", "error")
+                                return redirect("/verifyuser")
+                        else:
+                            flash("wrong password", "error")
+                            return redirect("/verifyuser")
+
                     else:
-                        flash("Unable to fetch your file please try later", "error")
-                        return redirect("/verifyuser")
-                else:
-                    flash("wrong password", "error")
-                    return redirect("/verifyuser")
-
+                        flash("Do not try shaddy stuff REGISTER to use the website", "error")
+                        return redirect("/registernew")
             else:
-                flash("Do not try shaddy stuff REGISTER to use the website", "error")
-                return redirect("/registernew")
+                return redirect("/verifyuser")
 
 
 @app.route("/delete", methods=["POST"])
@@ -335,6 +338,7 @@ def delete():
                 except:
                     flash("Could not get file try again ", "error")
                     return redirect("/verifyuser")
+                filedatalen=len(db.child(session["UserID"]).get().val())
                 if filedata is not None:
 
                     cid = filedata[-1]
@@ -347,7 +351,12 @@ def delete():
                 check, key = verify_hash(shash, passwd)
                 if check:
                     file = filename.replace(",", ".")
-                    db.child(session["UserID"]).child(filename).remove()
+                    if filedatalen==1:
+                        db.child(session["UserID"]).child(filename).remove()
+                        db.child(session["UserID"]).set("")
+                    else:
+
+                        db.child(session["UserID"]).child(filename).remove()
                     flash("File deleted", "message")
                     return redirect("/verifyuser")
                 else:
@@ -423,6 +432,7 @@ def send_download():
                         as_attachment=True,
                         attachment_filename=file,
                     )
+                
             else:
                 flash("Do not try shaddy stuff REGISTER to use the website", "error")
                 return redirect("/registernew")
@@ -435,8 +445,13 @@ def send_download():
 @app.route("/verifyuser")
 def verify():
     if "UserID" in session:
-        print(session)
+        
         users = db.get().val()
+        print(session["UserID"])
+        print("lio")
+        print()
+        for i in users:
+            print(i)
         if session["UserID"] in users:
             d = db.child(session["UserID"]).get().val()
             print(d)
