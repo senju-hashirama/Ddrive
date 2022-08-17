@@ -1,0 +1,8 @@
+cryptography==37.0.2
+Flask==2.1.2
+flask_assets==2.0
+pyrebase==3.0.27
+Pyrebase4==4.5.0
+python_bcrypt==0.3.2
+requests==2.27.1
+Werkzeug==2.1.2
