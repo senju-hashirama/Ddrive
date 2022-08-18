@@ -8,7 +8,7 @@ from flask import (
     send_file,
     flash,
 )
-from flask_session import Session
+
 import pyrebase
 import json
 import subprocess
